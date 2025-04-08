@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AuthenticationResponse} from './Entity/authentication-response';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,16 @@ export class UserService {
     localStorage.setItem('authResponse', JSON.stringify(authResponse));
     this.authResponse = authResponse;
     return true;
+  }
+
+  register(username: string,
+           password: string,
+           firstName: string,
+           lastName: string,
+           email: string,
+           phone: string ) {
+    const body : any = {username, password, firstName, lastName, email, phone};
+    return this.http.post<AuthenticationResponse>("http://localhost:9080/user/register", body);
   }
 
 }

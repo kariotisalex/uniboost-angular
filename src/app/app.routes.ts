@@ -4,6 +4,6 @@ import {SignupComponent} from './signup/signup.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full'},
-  { path: 'login', title:'Login', component: LoginComponent },
-  { path: 'signup', title:'Signup', component: SignupComponent },
+  { path: 'login', title:'Login | Uniboost', component: LoginComponent },
+  { path: 'signup', title:'Signup | Uniboost', component: SignupComponent },
 ];

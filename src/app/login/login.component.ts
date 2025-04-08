@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ReactiveFormsModule} from '@angular/forms';
+import {Component} from '@angular/core';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {UserService} from '../service/user.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {CommonModule} from '@angular/common';
+import {ErrorResponse} from '../service/Entity/error-response';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +22,7 @@ export class LoginComponent {
 
   loginHandling = new FormGroup({
     username : new FormControl('',[Validators.required]),
-    password : new FormControl('', [Validators.required])
+    password : new FormControl('',[Validators.required]),
   });
 
   onSubmit(){
@@ -35,7 +35,9 @@ export class LoginComponent {
         console.log("Successful : " + authResponse);
       },
       error: (err: HttpErrorResponse) => {
-        console.log("Error : " + err);
+        const errObject: ErrorResponse = err.error ;
+        this.error = errObject.detail;
+        console.log("Error : " + errObject.detail );
       }
     })
   }
