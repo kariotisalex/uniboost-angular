@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AuthenticationResponse} from './Entity/authentication-response';
-import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +10,14 @@ export class UserService {
   authResponse!: AuthenticationResponse;
 
   init() {
-    const auth : string | null = localStorage.getItem('authResponse');
-    if (auth != null) {
-      this.authResponse = JSON.parse(auth);
+    const access_token : string | null = localStorage.getItem('access_token');
+    const refresh_token: string | null = localStorage.getItem('refresh_token');
+
+    if (access_token != null && refresh_token != null) {
+      this.authResponse = {
+        access_token: access_token,
+        refresh_token: refresh_token
+      }
     }
   }
 
