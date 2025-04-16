@@ -1,13 +1,14 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {UserService} from '../service/user.service';
 import {HttpErrorResponse} from '@angular/common/http';
-import {ErrorResponse} from '../service/Entity/error-response';
+import {NgClass} from '@angular/common';
+import {UserService} from '../../service/user.service';
+import {ErrorResponse} from '../../service/Entity/error-response';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgClass],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
@@ -21,12 +22,12 @@ export class SignupComponent {
 
 
   signupHandling = new FormGroup({
-    username : new FormControl('',[Validators.required]),
-    password : new FormControl('',[Validators.required]),
+    username : new FormControl('',[Validators.required, Validators.minLength(6)]),
+    password : new FormControl('',[Validators.required, Validators.minLength(6)]),
     firstName : new FormControl('',[Validators.required]),
     lastName : new FormControl('',[Validators.required]),
-    email : new FormControl('',[Validators.required]),
-    phone : new FormControl('',[Validators.required]),
+    email : new FormControl('',[Validators.required,Validators.email]),
+    phone : new FormControl('',[Validators.required, Validators.minLength(10)]),
   });
 
 
@@ -39,7 +40,8 @@ export class SignupComponent {
     const email:string = this.signupHandling.value.email as string;
     const phone:string = this.signupHandling.value.phone as string;
     this.userService.register(username, password, firstName, lastName, email, phone)
-      .subscribe({next: authResponse => {
+      .subscribe({
+        next: authResponse => {
           this.userService.loggedin(authResponse);
         },
       error: (err: HttpErrorResponse) => {

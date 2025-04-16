@@ -27,7 +27,8 @@ export class UserService {
   }
 
   loggedin(authResponse: AuthenticationResponse): boolean {
-    localStorage.setItem('authResponse', JSON.stringify(authResponse));
+    localStorage.setItem('access_token', authResponse.access_token);
+    localStorage.setItem('refresh_token', authResponse.refresh_token);
     this.authResponse = authResponse;
     return true;
   }
@@ -42,4 +43,11 @@ export class UserService {
     return this.http.post<AuthenticationResponse>("http://localhost:9080/user/register", body);
   }
 
+  logout() {
+    localStorage.clear();
+    this.authResponse ={
+      access_token: '',
+      refresh_token: ''
+    };
+  }
 }
