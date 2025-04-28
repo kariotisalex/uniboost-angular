@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {AuthenticationResponse} from './Entity/authentication-response';
+import {AuthenticationResponse} from './models/authentication-response';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +10,10 @@ export class UserService {
 
   authResponse!: AuthenticationResponse;
 
+
   init() {
-    const access_token : string | null = localStorage.getItem('access_token');
-    const refresh_token: string | null = localStorage.getItem('refresh_token');
+    const access_token : string | null = sessionStorage.getItem('access_token');
+    const refresh_token: string | null = sessionStorage.getItem('refresh_token');
 
     if (access_token != null && refresh_token != null) {
       this.authResponse = {
@@ -22,17 +24,18 @@ export class UserService {
   }
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) { this.init(); }
 
   login(username: string, password: string) {
     const body: any = {username, password};
-    return this.http.post<AuthenticationResponse>("http://localhost:9080/user/login", body);
+    return this.http.post<AuthenticationResponse>("/api/user/login", body);
   }
 
   loggedin(authResponse: AuthenticationResponse): boolean {
-    localStorage.setItem('access_token', authResponse.access_token);
-    localStorage.setItem('refresh_token', authResponse.refresh_token);
+    sessionStorage.setItem('access_token', authResponse.access_token);
+    sessionStorage.setItem('refresh_token', authResponse.refresh_token);
     this.authResponse = authResponse;
     return true;
   }
@@ -48,10 +51,15 @@ export class UserService {
   }
 
   logout() {
-    localStorage.clear();
-    this.authResponse ={
-      access_token: '',
-      refresh_token: ''
-    };
+    this.http.get('/api/user/logout').subscribe({
+      next: authResponse => {
+        sessionStorage.clear();
+        this.authResponse = { access_token: '', refresh_token: '' };
+        this.router.navigate(['login']);
+      }
+    });
+
   }
+
+
 }

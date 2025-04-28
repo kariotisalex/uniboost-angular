@@ -3,7 +3,7 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {HttpErrorResponse} from '@angular/common/http';
 import {NgClass} from '@angular/common';
 import {UserService} from '../../service/user.service';
-import {ErrorResponse} from '../../service/Entity/error-response';
+import {ErrorResponse} from '../../service/models/error-response';
 
 @Component({
   selector: 'app-signup',

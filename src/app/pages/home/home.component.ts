@@ -29,7 +29,6 @@ export class HomeComponent {
   }
   logout(): void {
     this.userService.logout();
-    this.router.navigate(['login']);
   }
 
 }

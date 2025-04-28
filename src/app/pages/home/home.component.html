@@ -1,3 +1,4 @@
+<!-- home.component.html -->
 <div class="min-h-screen bg-gray-100">
   <!-- Top Navigation Bar -->
   <header class="bg-blue-50 shadow">
@@ -23,7 +24,7 @@
       <!-- Sidebar: Navigation Buttons -->
       <aside class="md:col-span-1 bg-white p-4 rounded-lg shadow h-48 overflow-y-auto">
         <nav class="space-y-4">
-          <!-- Home Button -->
+          <!-- Navigation Buttons -->
           <button
             type="button"
             [routerLink]="'/home/feed'"
@@ -32,24 +33,13 @@
             class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-blue-700 flex items-center"
           >
             <!-- Home Icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V12H9v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9z"
-              />
+            <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V12H9v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9z" />
             </svg>
             Home
           </button>
 
-          <!-- My Profile Button -->
           <button
             type="button"
             [routerLink]="'/home/myprofile'"
@@ -58,24 +48,13 @@
             class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-blue-700 flex items-center"
           >
             <!-- Profile Icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5.121 17.804A9 9 0 1 1 18.879 6.196M15 11a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"
-              />
+            <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5.121 17.804A9 9 0 1 1 18.879 6.196M15 11a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
             </svg>
             My Profile
           </button>
 
-          <!-- Add Post Button -->
           <button
             type="button"
             [routerLink]="'/home/addpost'"
@@ -84,28 +63,17 @@
             class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-blue-700 flex items-center"
           >
             <!-- Add Post Icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 4v16m8-8H4"
-              />
+            <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
             Add Post
           </button>
         </nav>
       </aside>
 
-      <!-- Feed Section -->
+      <!-- Dynamic Section (Feed, Profile, Add Post, etc.) -->
       <section class="md:col-span-3 bg-white p-4 rounded-lg shadow">
-        <router-outlet/>
+        <router-outlet></router-outlet>
       </section>
     </div>
   </main>

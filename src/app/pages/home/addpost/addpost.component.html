@@ -1,1 +1,125 @@
-<p>addpost works!</p>
+<div class="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-md">
+  <h2 class="text-2xl font-bold mb-6 text-center">Create Post</h2>
+
+  <form (ngSubmit)="onSubmit()" #postForm="ngForm" class="space-y-6">
+    <!-- Title -->
+    <div>
+      <label class="block text-sm font-medium mb-1" for="title">Title</label>
+      <input
+        id="title"
+        name="title"
+        type="text"
+        class="w-full p-2 border rounded-xl focus:outline-none focus:ring"
+        maxlength="255"
+        [(ngModel)]="title"
+        required
+      />
+    </div>
+
+    <!-- Preview Description -->
+    <div>
+      <label class="block text-sm font-medium mb-1" for="previewDescription">Preview Description</label>
+      <input
+        id="previewDescription"
+        name="previewDescription"
+        type="text"
+        class="w-full p-2 border rounded-xl focus:outline-none focus:ring"
+        [(ngModel)]="previewDescription"
+        maxlength="255"
+        required
+      />
+      <div class="flex justify-between text-xs text-gray-500 mt-1">
+        <span>A short version for preview cards</span>
+        <span>{{ 255 - (previewDescription?.length || 0) }} characters left</span>
+      </div>
+    </div>
+
+    <!-- Full Description -->
+    <div>
+      <label class="block text-sm font-medium mb-1" for="description">Description</label>
+      <textarea
+        id="description"
+        name="description"
+        class="w-full p-2 border rounded-xl focus:outline-none focus:ring"
+        rows="5"
+        [(ngModel)]="description"
+        required
+      ></textarea>
+    </div>
+
+    <!-- Max Enrolls -->
+    <div>
+      <label class="block text-sm font-medium mb-1" for="maxEnrolls">Max Enrolls</label>
+      <input
+        id="maxEnrolls"
+        name="maxEnrolls"
+        type="number"
+        min="1"
+        max="100"
+        class="w-full p-2 border rounded-xl focus:outline-none focus:ring"
+        [(ngModel)]="maxEnrolls"
+        required
+      />
+    </div>
+
+    <!-- Group or Personal -->
+    <div>
+      <label class="block text-sm font-medium mb-2">Type</label>
+      <div class="flex space-x-6">
+        <!-- Group Option -->
+        <label class="flex items-center space-x-2">
+          <input
+            type="radio"
+            name="isPersonal"
+            [value]="false"
+            [(ngModel)]="isPersonal"
+            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+          />
+          <span class="text-sm">Group</span>
+        </label>
+
+        <!-- Personal Option -->
+        <label class="flex items-center space-x-2">
+          <input
+            type="radio"
+            name="isPersonal"
+            [value]="true"
+            [(ngModel)]="isPersonal"
+            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+          />
+          <span class="text-sm">Personal</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Place -->
+    <div>
+      <label class="block text-sm font-medium mb-1" for="place">Place</label>
+      <input
+        id="place"
+        name="place"
+        type="text"
+        class="w-full p-2 border rounded-xl focus:outline-none focus:ring"
+        [(ngModel)]="place"
+        maxlength="255"
+        required
+      />
+    </div>
+
+    <!-- Error Message (hidden by default) -->
+    <div *ngIf="errorMessage" class="text-red-500 text-center mb-4">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center">
+      <button
+        type="submit"
+        class="px-6 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition"
+        [disabled]="postForm.invalid"
+      >
+        Create
+      </button>
+    </div>
+  </form>
+</div>

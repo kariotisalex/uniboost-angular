@@ -6,6 +6,7 @@ import {FeedComponent} from './pages/home/feed/feed.component';
 import {MyprofileComponent} from './pages/home/myprofile/myprofile.component';
 import {AddpostComponent} from './pages/home/addpost/addpost.component';
 import {homeGuard} from './home.guard';
+import {CourseDetailsComponent} from './pages/home/feed/course-details/course-details.component';
 
 
 export const routes: Routes = [
@@ -18,6 +19,7 @@ export const routes: Routes = [
   children:[
     { path: 'feed', title:'Uniboost', component: FeedComponent },
     { path: 'myprofile', title:'Uniboost', component: MyprofileComponent},
-    { path: 'addpost',title:'Uniboost', component: AddpostComponent}
+    { path: 'addpost',title:'Uniboost', component: AddpostComponent},
+    { path: 'course/:id', title:"Uniboost", component: CourseDetailsComponent}
   ]},
 ];

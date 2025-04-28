@@ -1,12 +1,104 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {PostResponseDto} from '../../../service/models/post-response';
+import {PostService} from '../../../service/post.service';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {PostCardComponent} from './post-card/post-card.component';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-feed',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, FormsModule, PostCardComponent],
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.css'
 })
-export class FeedComponent {
+export class FeedComponent implements OnInit{
+
+  posts : PostResponseDto[] = [];
+  searchQuery ='';
+
+  currentPage = 1;
+  totalElements = 100; // 100 lessons total
+  pageSize = 10;       // Show 10 lessons per page
+  maxVisiblePages = 5; // Max number of page buttons visible
+
+
+
+  constructor(private postService: PostService,
+              public router: Router) {}
+
+  ngOnInit(): void {
+        this.postService.getPosts().subscribe({
+          next: value => {
+            this.posts = value.content;
+            this.totalElements = value.total;
+          }
+        });
+    }
+
+
+  get totalPages(): number {
+    return Math.ceil(this.totalElements / this.pageSize);
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.postService.getPostsByPage(page-1).subscribe({
+        next: value => {
+          this.posts = value.content;
+          this.totalElements = value.total;}
+      })
+      this.currentPage = page;
+    }
+  }
+
+  get visiblePages(): number[] {
+    const pages: number[] = [];
+    const half = Math.floor(this.maxVisiblePages / 2);
+
+    let start = Math.max(2, this.currentPage - half);
+    let end = Math.min(this.totalPages - 1, this.currentPage + half);
+
+    if (this.currentPage <= half) {
+      start = 2;
+      end = this.maxVisiblePages;
+    }
+
+    if (this.currentPage >= this.totalPages - half) {
+      start = this.totalPages - this.maxVisiblePages + 1;
+      end = this.totalPages - 1;
+    }
+
+    for (let i = start; i <= end; i++) {
+      if (i > 1 && i < this.totalPages) {
+        pages.push(i);
+      }
+    }
+
+    return pages;
+  }
+  // ngOnInit(): void {
+  //   this.loadPosts();
+  // }
+  //
+  // loadPosts() {
+  //   this.postService.getPosts().subscribe({
+  //     next: value => this.posts = value.content
+  //     , error: error => console.log(error)
+  //   });
+  // }
+
+  // filteredPosts(): PostResponseDto[] {
+  //   if (!this.searchQuery.trim()) {
+  //     return this.posts;
+  //   }
+  //   return this.posts.filter(post =>
+  //     post.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+  //     post.description.toLowerCase().includes(this.searchQuery.toLowerCase())
+  //   );
+  // }
+
 
 }
