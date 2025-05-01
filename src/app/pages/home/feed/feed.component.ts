@@ -79,26 +79,5 @@ export class FeedComponent implements OnInit{
 
     return pages;
   }
-  // ngOnInit(): void {
-  //   this.loadPosts();
-  // }
-  //
-  // loadPosts() {
-  //   this.postService.getPosts().subscribe({
-  //     next: value => this.posts = value.content
-  //     , error: error => console.log(error)
-  //   });
-  // }
-
-  // filteredPosts(): PostResponseDto[] {
-  //   if (!this.searchQuery.trim()) {
-  //     return this.posts;
-  //   }
-  //   return this.posts.filter(post =>
-  //     post.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-  //     post.description.toLowerCase().includes(this.searchQuery.toLowerCase())
-  //   );
-  // }
-
 
 }

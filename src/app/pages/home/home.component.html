@@ -29,7 +29,7 @@
             type="button"
             [routerLink]="'/home/feed'"
             (click)="setActive('/home/feed')"
-            [ngClass]="activeButton === '/home/feed' ? 'bg-blue-200' : 'hover:bg-blue-100'"
+            [ngClass]="this.navBarService.activeButton === '/home/feed' ? 'bg-blue-200' : 'hover:bg-blue-100'"
             class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-blue-700 flex items-center"
           >
             <!-- Home Icon -->
@@ -44,7 +44,7 @@
             type="button"
             [routerLink]="'/home/myprofile'"
             (click)="setActive('/home/myprofile')"
-            [ngClass]="activeButton === '/home/myprofile' ? 'bg-blue-200' : 'hover:bg-blue-100'"
+            [ngClass]="this.navBarService.activeButton === '/home/myprofile' ? 'bg-blue-200' : 'hover:bg-blue-100'"
             class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-blue-700 flex items-center"
           >
             <!-- Profile Icon -->
@@ -59,7 +59,7 @@
             type="button"
             [routerLink]="'/home/addpost'"
             (click)="setActive('/home/addpost')"
-            [ngClass]="activeButton === '/home/addpost' ? 'bg-blue-200' : 'hover:bg-blue-100'"
+            [ngClass]="this.navBarService.activeButton === '/home/addpost' ? 'bg-blue-200' : 'hover:bg-blue-100'"
             class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-blue-700 flex items-center"
           >
             <!-- Add Post Icon -->

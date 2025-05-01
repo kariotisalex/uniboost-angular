@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {PostDetailsResponseDto} from '../../../../service/models/post-details-response-dto';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ActivatedRoute} from '@angular/router';
+import {PostService} from '../../../../service/post.service';
 
 @Component({
   selector: 'app-course-details',
@@ -11,20 +14,38 @@ import {PostDetailsResponseDto} from '../../../../service/models/post-details-re
   templateUrl: './course-details.component.html',
   styleUrl: './course-details.component.css'
 })
-export class CourseDetailsComponent {
-  course: PostDetailsResponseDto = {
-    "id": "31d914b3-a49a-417f-96a0-69713b4552ba",
-    "title": "HIIT Blast",
-    "previewDescription": "High-intensity training.",
-    "maxEnrolls": 25,
-    "isPersonal": false,
-    "place": "Outdoor Park",
-    "userOwner": null,
-    "enrollments": 24,
-    "owner": true,
-    "description": "Push your limits with this fast-paced HIIT session designed to burn calories and build endurance.",
-    "enrolled": false
-  };
+export class CourseDetailsComponent implements OnInit {
+
+
+  constructor(private route: ActivatedRoute,
+              private postService: PostService) {
+  }
+
+  ngOnInit(): void {
+      this.getPost()
+  }
+
+  getPost() {
+    this.route.paramMap
+      .subscribe({
+        next: res => {
+          const pid = res.get('id');
+          if (pid) {
+            this.postService.getPostDetails(pid)
+              .subscribe({
+                next: res => {
+                  this.course = res;
+                },error: (err : HttpErrorResponse) =>{
+                  console.log(err.error);
+                }
+              });
+          }
+        }
+      });
+
+  }
+
+  course!: PostDetailsResponseDto ;
 
   getProgressColor(): string {
     const percentage = (this.course.enrollments / this.course.maxEnrolls) * 100;
@@ -39,13 +60,19 @@ export class CourseDetailsComponent {
   }
 
   enroll() {
-    console.log('Enroll clicked');
-    this.course.enrolled = true;
+    this.postService.enroll(this.course.id)
+      .subscribe({
+        next: res => this.course = res,
+        error: (err : HttpErrorResponse) =>{console.log(err.error?.detail)}
+      })
   }
 
   disenroll() {
-    console.log('Disenroll clicked');
-    this.course.enrolled = false;
+    this.postService.disenroll(this.course.id)
+      .subscribe({
+        next: value => this.course = value,
+        error: (err : HttpErrorResponse) =>{console.log(err.error?.detail)}})
+
   }
 
 }

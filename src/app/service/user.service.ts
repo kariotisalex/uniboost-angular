@@ -2,6 +2,9 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AuthenticationResponse} from './models/authentication-response';
 import {Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {UserPostResponseDto} from './models/user-post-response-dto';
+import {UserInfoRequestDto} from './models/user-info-request-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -58,8 +61,26 @@ export class UserService {
         this.router.navigate(['login']);
       }
     });
-
   }
 
 
+  getUserInfo(): Observable<UserPostResponseDto> {
+    return this.http.get<UserPostResponseDto>(`/api/post/userinfo`);
+  }
+
+
+  updateUserInfo(editedUser: UserInfoRequestDto): Observable<UserPostResponseDto> {
+    return this.http.put<UserPostResponseDto>(`/api/post/userinfo`,editedUser);
+  }
+
+  updateUserEmail(email: string): Observable<UserPostResponseDto> {
+    const body = {"email": email};
+    return this.http.put<UserPostResponseDto>(`/api/post/email`, body);
+  }
+
+  updateUserUsername(username: string): Observable<UserPostResponseDto> {
+    const body={"newUsername": username}
+
+    return this.http.put<UserPostResponseDto>(`/api/post/username`, body);
+  }
 }

@@ -10,7 +10,7 @@ import {UserService} from '../../../../service/user.service';
 @Component({
   selector: 'app-post-card',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ReactiveFormsModule, Router],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ReactiveFormsModule],
   templateUrl: './post-card.component.html',
   styleUrl: './post-card.component.css'
 })
@@ -21,12 +21,7 @@ export class PostCardComponent {
   constructor(private postService: PostService, private router: Router) {
   }
 
-  goto(id: string){
-    // this.postService.getPostDetails(id).subscribe({
-    //   next: value => {
-    //     this.router.navigation(['/home/course', id], { state: { course: value } });
-    //   },
-    //   error: (error:HttpErrorResponse) => {}
-    // });
+  goto(){
+    this.router.navigate([`home/course/${this.post.id}`]);
   }
 }

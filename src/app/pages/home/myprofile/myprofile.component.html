@@ -1,10 +1,176 @@
-<p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-  Section 1.10.32 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC
+<div class="max-w-6xl mx-auto pt-0 px-6 pb-6 space-y-10">
+  <!-- Personal Information Section -->
+  <section class="w-full max-w-4xl mx-auto px-6 py-12">
+    <!-- Header with Edit/Save/Cancel Buttons -->
+    <div class="mb-10 border-b pb-4 flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">My Profile</h1>
+        <p class="text-sm text-blue-600 mt-1">Personal Information</p>
+      </div>
 
-  "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
-  1914 translation by H. Rackham
+      <ng-container *ngIf="isEditMode; else editButton">
+        <div class="flex gap-3">
+          <button
+            class="text-sm font-medium text-white bg-blue-600 hover:bg-blue-700
+                   px-4 py-1.5 rounded-lg transition-all duration-200
+                   active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400
+                   disabled:opacity-50 disabled:cursor-not-allowed"
+            (click)="saveChanges()"
+            [disabled]="isSaveDisabled()"
+          >
+            Save
+          </button>
+          <button
+            class="text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200
+                   px-4 py-1.5 rounded-lg transition-all duration-200
+                   active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+            (click)="cancelEdit()"
+          >
+            Cancel
+          </button>
+        </div>
+      </ng-container>
 
-  "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?"
-  Section 1.10.33 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC
+      <ng-template #editButton>
+        <button
+          class="text-sm font-medium text-blue-600 hover:text-white border border-blue-100 hover:border-blue-600
+                 bg-transparent hover:bg-blue-600 px-4 py-1.5 rounded-lg transition-all duration-200
+                 active:scale-95 focus:outline-none shadow-sm hover:shadow-md"
+          (click)="toggleEdit()"
+        >
+          Edit
+        </button>
+      </ng-template>
+    </div>
 
-  "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."</p>
+    <!-- Profile Fields -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-12 text-gray-800 text-[15px]">
+      <!-- Username -->
+      <div>
+        <label class="text-xs font-semibold text-blue-500 uppercase tracking-wide mb-1 block">Username</label>
+        <div class="flex items-center gap-2">
+          <ng-container *ngIf="!isEditingUsername; else editUsername">
+            <p class="text-base font-medium">{{ user?.username }}</p>
+            <button (click)="startEditingUsername()" class="text-blue-600 hover:text-blue-800">✏️</button>
+          </ng-container>
+          <ng-template #editUsername>
+            <input
+              [(ngModel)]="editedUser.username"
+              type="text"
+              class="w-full border border-gray-300 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button (click)="saveUsername()" class="text-green-600 hover:text-green-800" title="Save">💾</button>
+            <button (click)="cancelUsernameEdit()" class="text-red-500 hover:text-red-700" title="Cancel">❌</button>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label class="text-xs font-semibold text-blue-500 uppercase tracking-wide mb-1 block">Email</label>
+        <div class="flex items-center gap-2">
+          <ng-container *ngIf="!isEditingEmail; else editEmail">
+            <p class="text-base font-medium">{{ user?.email }}</p>
+            <button (click)="startEditingEmail()" class="text-blue-600 hover:text-blue-800">✏️</button>
+          </ng-container>
+          <ng-template #editEmail>
+            <input
+              [(ngModel)]="editedUser.email"
+              type="email"
+              class="w-full border border-gray-300 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button (click)="saveEmail()" class="text-green-600 hover:text-green-800" title="Save">💾</button>
+            <button (click)="cancelEmailEdit()" class="text-red-500 hover:text-red-700" title="Cancel">❌</button>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- First Name -->
+      <div>
+        <label class="text-xs font-semibold text-blue-500 uppercase tracking-wide mb-1 block">First Name</label>
+        <ng-container *ngIf="isEditMode; else firstNameDisplay">
+          <input
+            [(ngModel)]="editedUser.firstname"
+            type="text"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </ng-container>
+        <ng-template #firstNameDisplay>
+          <p class="text-base font-medium">{{ user?.firstname }}</p>
+        </ng-template>
+      </div>
+
+      <!-- Last Name -->
+      <div>
+        <label class="text-xs font-semibold text-blue-500 uppercase tracking-wide mb-1 block">Last Name</label>
+        <ng-container *ngIf="isEditMode; else lastNameDisplay">
+          <input
+            [(ngModel)]="editedUser.lastname"
+            type="text"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </ng-container>
+        <ng-template #lastNameDisplay>
+          <p class="text-base font-medium">{{ user?.lastname }}</p>
+        </ng-template>
+      </div>
+
+      <!-- Phone -->
+      <div>
+        <label class="text-xs font-semibold text-blue-500 uppercase tracking-wide mb-1 block">Phone</label>
+        <ng-container *ngIf="isEditMode; else phoneDisplay">
+          <input
+            [(ngModel)]="editedUser.phone"
+            type="text"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </ng-container>
+        <ng-template #phoneDisplay>
+          <p class="text-base font-medium">{{ user?.phone }}</p>
+        </ng-template>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tabs Section: Enrolled & Created -->
+  <section class="w-full max-w-6xl mx-auto px-6 pt-0">
+    <!-- Tab Headers -->
+    <div class="flex space-x-6 border-b border-gray-200 mb-6">
+      <button
+        (click)="activeTab = 'enrolled'"
+        [ngClass]="{
+          'border-b-2 border-blue-600 text-blue-600 font-semibold': activeTab === 'enrolled',
+          'text-gray-500 hover:text-blue-500': activeTab !== 'enrolled'
+        }"
+        class="pb-2 transition"
+      >
+        Enrolled Lessons
+      </button>
+
+      <button
+        (click)="activeTab = 'created'; console.log(activeTab)"
+        [ngClass]="{
+          'border-b-2 border-blue-600 text-blue-600 font-semibold': activeTab === 'created',
+          'text-gray-500 hover:text-blue-500': activeTab !== 'created'
+        }"
+        class="pb-2 transition"
+      >
+        Created Courses
+      </button>
+    </div>
+
+    <!-- Tab Content -->
+    <div>
+      <ng-container [ngSwitch]="activeTab">
+        <app-enrolled-courses
+          *ngSwitchCase="'enrolled'">
+        </app-enrolled-courses>
+
+        <app-my-courses
+          *ngSwitchCase="'created'"
+          />
+
+      </ng-container>
+    </div>
+  </section>
+</div>

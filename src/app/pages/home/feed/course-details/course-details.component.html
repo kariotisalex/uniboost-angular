@@ -11,7 +11,7 @@
   <!-- Course Information -->
   <div class="space-y-8">
 
-    <!-- Line 1: Instructor, Place, Type, Enroll/Disenroll -->
+    <!-- Line 1: Instructor, Place, Type, Enroll/Disenroll or Edit -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
 
       <!-- Instructor -->
@@ -20,86 +20,90 @@
 
         <!-- Check if userOwner exists -->
         <ng-container *ngIf="course.userOwner; else yourPostTemplate">
-
-          <!-- Full Name -->
           <p class="text-lg font-semibold text-gray-700">
             {{ course.userOwner.firstname }} {{ course.userOwner.lastname }}
           </p>
-
-          <!-- Username -->
           <p class="text-sm text-gray-500">
             {{ course.userOwner.username }}
           </p>
-
-          <!-- Email -->
           <p class="text-xs text-gray-400">
             {{ course.userOwner.email }}
           </p>
-
-
         </ng-container>
 
         <!-- If it's your own post -->
         <ng-template #yourPostTemplate>
-          <p class="text-lg font-semibold text-gray-700">
-            Your Post
-          </p>
-          <p class="text-sm text-gray-500">
-            (You are the instructor)
-          </p>
+          <p class="text-lg font-semibold text-gray-700">Your Post</p>
+          <p class="text-sm text-gray-500">(You are the instructor)</p>
         </ng-template>
       </div>
 
       <!-- Place -->
       <div class="text-center">
         <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Place</h2>
-        <p class="text-lg font-medium text-gray-700">{{ course.place }}</p>
+        <ng-container *ngIf="course.place?.startsWith('http'); else plainPlace">
+          <a
+            [href]="course.place"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-lg font-medium text-blue-600 hover:underline"
+          >
+            Click the link
+          </a>
+        </ng-container>
+        <ng-template #plainPlace>
+          <p class="text-lg font-medium text-gray-700">{{ course.place }}</p>
+        </ng-template>
       </div>
 
       <!-- Type -->
       <div class="text-center">
         <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Type</h2>
-        <p class="text-lg font-medium text-gray-700">{{ course.isPersonal ? 'Personal' : 'Group' }}</p>
+        <p class="text-lg font-medium text-gray-700">
+          {{ course.isPersonal ? 'Personal' : 'Group' }}
+        </p>
       </div>
 
-      <!-- Enroll/Disenroll Button -->
-      <div *ngIf="!course.owner" class="flex items-center justify-center">
-        <button
-          *ngIf="!course.enrolled; else disenrollTemplate"
-          class="px-6 py-3 bg-green-500 text-white text-base font-semibold rounded-full hover:bg-green-600 transition w-40"
-          (click)="enroll()"
-        >
-          Enroll
-        </button>
-
-        <ng-template #disenrollTemplate>
+      <!-- Enroll/Disenroll or Edit Button -->
+      <div class="flex items-center justify-center">
+        <ng-container *ngIf="!course.owner">
+          <!-- Enroll -->
           <button
-            class="px-6 py-3 bg-red-500 text-white text-base font-semibold rounded-full hover:bg-red-600 transition w-40"
-            (click)="disenroll()"
+            *ngIf="!course.enrolled; else disenrollTemplate"
+            class="px-6 py-3 bg-green-500 text-white text-base font-semibold rounded-full
+                   hover:bg-green-600 transition-all duration-200 active:scale-95 focus:outline-none
+                   focus:ring-2 focus:ring-offset-2 focus:ring-green-400 w-40"
+            (click)="enroll()"
           >
-            Disenroll
+            Enroll
           </button>
-        </ng-template>
-      </div>
 
+          <!-- Disenroll -->
+          <ng-template #disenrollTemplate>
+            <button
+              class="px-6 py-3 bg-red-500 text-white text-base font-semibold rounded-full
+                     hover:bg-red-600 transition-all duration-200 active:scale-95 focus:outline-none
+                     focus:ring-2 focus:ring-offset-2 focus:ring-red-400 w-40"
+              (click)="disenroll()"
+            >
+              Disenroll
+            </button>
+          </ng-template>
+        </ng-container>
+
+      </div>
     </div>
 
     <!-- Line 2: Enrollment Progress -->
     <div class="space-y-4">
       <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide text-center">Enrollment Progress</h2>
 
-      <!-- Progress Bar -->
       <div class="relative w-full bg-gray-200 rounded-full h-6 overflow-hidden">
-
-        <!-- Colored Progress Background -->
         <div
           class="absolute top-0 left-0 h-6 transition-all duration-300 rounded-full"
           [ngClass]="getProgressColor()"
           [style.width.%]="(course.enrollments / course.maxEnrolls) * 100"
-        >
-        </div>
-
-        <!-- Centered Numbers -->
+        ></div>
         <div class="absolute inset-0 flex items-center justify-center">
           <span class="text-sm font-semibold text-gray-800">
             {{ course.enrollments }} / {{ course.maxEnrolls }}
@@ -107,7 +111,6 @@
         </div>
       </div>
     </div>
-
   </div>
 
   <hr class="border-gray-200" />
@@ -115,7 +118,8 @@
   <!-- Full Description -->
   <div class="space-y-4">
     <h2 class="text-2xl font-semibold">Description</h2>
-    <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ course.description }}</p>
+    <p class="text-gray-700 leading-relaxed whitespace-pre-line">
+      {{ course.description }}
+    </p>
   </div>
-
 </div>
