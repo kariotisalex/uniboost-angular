@@ -1,0 +1,23 @@
+<div class="space-y-2">
+  <div
+    *ngFor="let student of students"
+    class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-2 bg-gray-50 hover:bg-gray-100 transition">
+
+    <!-- Student Info -->
+    <div class="leading-tight">
+      <p class="text-base font-semibold text-gray-800">
+        {{ student.firstname }} {{ student.lastname }}
+      </p>
+      <p class="text-sm text-gray-500">
+        {{ student.email }} · {{ student.phone }}
+      </p>
+    </div>
+
+    <!-- Remove Button -->
+    <button
+      class="text-gray-400 hover:text-red-500 transition text-xl ml-4"
+      (click)="remove.emit(student)">
+      &times;
+    </button>
+  </div>
+</div>

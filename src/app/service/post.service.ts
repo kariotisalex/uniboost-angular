@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {PostDetailsResponseDto} from './models/post-details-response-dto';
 import {UserPostResponseDto} from './models/user-post-response-dto';
+import {PostResponseOwnerDto} from './models/post-response-owner-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,6 @@ export class PostService {
     title: string
   }): Observable<unknown> {
     return this.http.post('/api/post', body);
-
   }
 
   getPostDetails(id: string): Observable<PostDetailsResponseDto> {
@@ -47,13 +47,17 @@ export class PostService {
     return this.http.post<PostDetailsResponseDto>(`/api/post/disenroll/${id}`, {})
   }
 
-  userEnrolled(){
-    return this.http.get
-  }
-
-
   getEnrolledCourses(page: number, pageSize: number) {
-    return this.http.get<PostResponseContainerDto>(`/api/post/myposts?page=${page}&size=${pageSize}`);
+    return this.http.get<PostResponseContainerDto>(`/api/post/enrolledposts?page=${page}&size=${pageSize}`);
 
   }
+
+  getMyPosts(page: number, pageSize: number) {
+    return this.http.get<PostResponseContainerDto>(`/api/post/myposts?page=${page}&size=${pageSize}`);
+  }
+
+  getMyPostDetails(id: string): Observable<PostResponseOwnerDto> {
+    return this.http.get<PostResponseOwnerDto>(`/api/post/mypost/${id}`);
+  }
+
 }

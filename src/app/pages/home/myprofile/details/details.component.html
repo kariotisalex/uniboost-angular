@@ -1,0 +1,124 @@
+<div class="max-w-3xl mx-auto mt-10 p-8 rounded-3xl border border-gray-200 bg-white space-y-8">
+
+  <!-- Title & Preview -->
+  <div>
+    <h2 class="text-4xl font-extrabold text-gray-900 mb-2">{{ course.title }}</h2>
+
+    <ng-container *ngIf="!editMode; else editPreview">
+      <p class="text-lg text-gray-600">{{ course.previewDescription }}</p>
+    </ng-container>
+
+    <ng-template #editPreview>
+      <textarea
+        [(ngModel)]="course.previewDescription"
+        maxlength="255"
+        class="w-full h-24 resize-none text-base text-gray-700 border border-gray-300 rounded px-3 py-2"
+        placeholder="Enter a short course preview (max 255 characters)...">
+      </textarea>
+      <div class="text-sm text-gray-500 text-right mt-1">
+        {{ previewRemainingChars }} characters remaining
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Type | Location | Edit/Delete -->
+  <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6 mt-6">
+
+    <!-- Type & Location -->
+    <div class="flex flex-col sm:flex-row gap-10 sm:items-start text-base text-gray-700 flex-1">
+
+      <!-- Type -->
+      <div>
+        <label class="block text-base font-semibold text-gray-700 uppercase tracking-wide mb-1">Type</label>
+        <ng-container *ngIf="!editMode; else editType">
+          <span class="inline-block bg-gray-100 text-gray-800 px-3 py-1 text-sm font-semibold uppercase rounded-full">
+            {{ course.isPersonal ? 'Personal' : 'Group' }}
+          </span>
+        </ng-container>
+        <ng-template #editType>
+          <select [(ngModel)]="course.isPersonal"
+                  class="border border-gray-300 rounded px-3 py-1 text-sm">
+            <option [ngValue]="true">Personal</option>
+            <option [ngValue]="false">Group</option>
+          </select>
+        </ng-template>
+      </div>
+
+      <!-- Location -->
+      <div>
+        <label class="block text-base font-semibold text-gray-700 uppercase tracking-wide mb-1">Location</label>
+        <ng-container *ngIf="!editMode; else editLocation">
+          <p class="text-base font-medium text-gray-800">{{ course.place }}</p>
+        </ng-container>
+        <ng-template #editLocation>
+          <input [(ngModel)]="course.place"
+                 class="border border-gray-300 rounded px-3 py-1 text-base text-gray-800 w-full" />
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Edit / Save & Delete / Cancel Buttons -->
+    <div class="flex flex-col space-y-3 w-full sm:w-40">
+      <!-- Edit/Save -->
+      <button
+        [ngClass]="editMode ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'"
+        class="text-white w-full px-5 py-2.5 text-lg font-bold rounded-full transition"
+        (click)="onEdit()">
+        {{ editMode ? 'Save' : 'Edit' }}
+      </button>
+
+      <!-- Cancel (editMode) or Delete -->
+      <button
+        [ngClass]="editMode
+          ? 'bg-gray-300 hover:bg-gray-400 text-gray-800'
+          : 'bg-red-600 hover:bg-red-700 text-white'"
+        class="w-full px-5 py-2.5 text-lg font-bold rounded-full transition"
+        (click)="editMode ? onCancel() : onDelete()">
+        {{ editMode ? 'Cancel' : 'Delete' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Enrollment Progress -->
+  <div class="col-span-1 sm:col-span-3">
+    <label class="block text-base font-semibold text-gray-700 uppercase tracking-wide mb-2">
+      Enrollment Progress
+    </label>
+
+    <div class="w-full h-10 bg-gray-200 rounded-full relative overflow-hidden">
+      <div
+        class="h-full rounded-full transition-all duration-500 ease-in-out"
+        [style.width.%]="(course.enrollments / course.maxEnrolls) * 100"
+        [ngClass]="getProgressBarClass()">
+      </div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <span class="text-sm font-semibold text-black">
+          {{ course.enrollments }} / {{ course.maxEnrolls }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="border-t border-gray-200 pt-6"></div>
+
+  <!-- Description -->
+  <div>
+    <label class="block text-base font-semibold text-gray-700 uppercase tracking-wide mb-2">
+      Description
+    </label>
+    <ng-container *ngIf="!editMode; else editDescription">
+      <p class="text-base text-gray-700 leading-relaxed">{{ course.description }}</p>
+    </ng-container>
+    <ng-template #editDescription>
+      <textarea [(ngModel)]="course.description"
+                class="w-full text-base text-gray-700 border border-gray-300 rounded px-3 py-2"></textarea>
+    </ng-template>
+  </div>
+
+  <!-- Enrolled Students (no label) -->
+  <app-enrolled-user
+    [students]="course.enrolledStudents"
+    (remove)="onRemoveStudent($event)">
+  </app-enrolled-user>
+</div>

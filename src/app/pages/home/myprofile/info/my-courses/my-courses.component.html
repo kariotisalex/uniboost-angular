@@ -1,0 +1,58 @@
+<!-- Enrolled Lessons Grid -->
+<div *ngIf="posts.length > 0; else noCourses">
+  <!-- Course Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    <div
+      *ngFor="let post of posts"
+      (click)="onPostClick(post.id)"
+      class="cursor-pointer bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md hover:ring-2 hover:ring-blue-500 transition duration-200"
+    >
+      <!-- Title -->
+      <h3 class="text-lg font-semibold text-blue-700 mb-2">{{ post.title }}</h3>
+
+      <!-- Description -->
+      <p class="text-gray-600 text-sm mb-4">{{ post.previewDescription }}</p>
+
+      <!-- Place -->
+      <div class="text-sm text-gray-500 mb-1">
+        <strong class="text-gray-700">Place:</strong> {{ post.place }}
+      </div>
+
+      <!-- Instructor Info -->
+      <div class="text-sm text-gray-500">
+        <strong class="text-gray-700">Instructor:</strong>
+        {{ post.userOwner.firstname }} {{ post.userOwner.lastname }}
+        <span class="block text-xs text-blue-500">{{ post.userOwner.username }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div class="flex justify-center gap-2 mt-4">
+    <ng-container *ngFor="let page of displayedPages">
+      <!-- Numbered Page Button -->
+      <ng-container *ngIf="page !== '...'; else ellipsis">
+        <button
+          (click)="pageHandler(+page)"
+          [ngClass]="{
+            'bg-blue-600 text-white': currentPage === +page,
+            'bg-white text-gray-700 border': currentPage !== +page
+          }"
+          class="w-10 h-10 rounded-full border border-gray-300 shadow-sm hover:bg-blue-100 hover:text-blue-700 transition"
+        >
+          {{ page }}
+        </button>
+      </ng-container>
+
+      <!-- Ellipsis Placeholder -->
+      <ng-template #ellipsis>
+        <span class="w-10 h-10 flex items-center justify-center text-gray-400">…</span>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>
+
+<!-- No Enrolled Courses -->
+<ng-template #noCourses>
+  <p class="text-center text-gray-500 italic mt-4">You are not enrolled in any lessons yet.</p>
+</ng-template>

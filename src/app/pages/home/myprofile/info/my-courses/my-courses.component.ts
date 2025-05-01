@@ -1,18 +1,21 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {PostResponseContainerDto, PostResponseDto} from '../../../../service/models/post-response';
-import {CommonModule} from '@angular/common';
-import {PostService} from '../../../../service/post.service';
+import {Component, OnInit} from '@angular/core';
+import {PostResponseContainerDto, PostResponseDto} from '../../../../../service/models/post-response';
+import {PostService} from '../../../../../service/post.service';
 import {Router} from '@angular/router';
-import {NavBarService} from '../../../../service/nav-bar.service';
+import {NavBarService} from '../../../../../service/nav-bar.service';
+import {HttpErrorResponse} from '@angular/common/http';
+import {CommonModule} from '@angular/common';
 
 @Component({
-  selector: 'app-enrolled-courses',
+  selector: 'app-my-courses',
   standalone:true,
-  imports: [CommonModule],
-  templateUrl: './enrolled-courses.component.html',
-  styleUrl: './enrolled-courses.component.css'
+  imports: [
+    CommonModule
+  ],
+  templateUrl: './my-courses.component.html',
+  styleUrl: './my-courses.component.css'
 })
-export class EnrolledCoursesComponent implements OnInit {
+export class MyCoursesComponent implements OnInit{
   posts: PostResponseDto[] = [];
   totalElements: number = 0;
 
@@ -27,10 +30,17 @@ export class EnrolledCoursesComponent implements OnInit {
   }
 
   fetchPosts(page: number): void {
-    this.postService.getEnrolledCourses(page-1, this.pageSize).subscribe((res: PostResponseContainerDto) => {
-      this.posts = res.content;
-      this.totalElements = res.total;
-      this.currentPage = page;
+    this.postService.getMyPosts(page-1, this.pageSize).subscribe({
+      next: (res: PostResponseContainerDto) => {
+        console.log(res.content);
+        this.posts = res.content;
+        console.log(res.total);
+        this.totalElements = res.total;
+        this.currentPage = page;
+      },
+      error: (err: HttpErrorResponse) => {
+        console.log(err);
+      }
     });
   }
 
@@ -75,8 +85,11 @@ export class EnrolledCoursesComponent implements OnInit {
   }
 
   onPostClick(postId: string): void {
-    this.navBarService.activeButton = '/home/feed';
-    this.router.navigate([`home/course/${postId}`]);
+    this.navBarService.activeButton = '/home/myprofile';
+    this.router.navigate([`home/myprofile/details/${postId}`]);
 
   }
+
+
+
 }
