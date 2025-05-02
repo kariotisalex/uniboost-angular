@@ -65,23 +65,23 @@ export class UserService {
 
 
   getUserInfo(): Observable<UserPostResponseDto> {
-    return this.http.get<UserPostResponseDto>(`/api/post/userinfo`);
+    return this.http.get<UserPostResponseDto>(`/api/user/userinfo`);
   }
 
 
   updateUserInfo(editedUser: UserInfoRequestDto): Observable<UserPostResponseDto> {
-    return this.http.put<UserPostResponseDto>(`/api/post/userinfo`,editedUser);
+    return this.http.put<UserPostResponseDto>(`/api/user/userinfo`,editedUser);
   }
 
   updateUserEmail(email: string): Observable<UserPostResponseDto> {
     const body = {"email": email};
-    return this.http.put<UserPostResponseDto>(`/api/post/email`, body);
+    return this.http.put<UserPostResponseDto>(`/api/user/email`, body);
   }
 
   updateUserUsername(username: string): Observable<UserPostResponseDto> {
     const body={"newUsername": username}
 
-    return this.http.put<UserPostResponseDto>(`/api/post/username`, body);
+    return this.http.put<UserPostResponseDto>(`/api/user/username`, body);
   }
 
   sendResetLink(username: string): Observable<any> {
