@@ -20,6 +20,7 @@ export class DetailsComponent implements OnInit{
   courseId!: string;
   editMode = false;
   course!: PostResponseOwnerDto;
+  originalCourse!: PostResponseOwnerDto;
 
   constructor(private postService: PostService,
               private route: ActivatedRoute) {}
@@ -27,8 +28,10 @@ export class DetailsComponent implements OnInit{
   ngOnInit(): void {
     this.courseId = this.route.snapshot.paramMap.get('id') as string;
     this.postService.getMyPostDetails(this.courseId).subscribe({
-      next: res => {this.course = res}
-
+      next: res => {
+        this.course = res;
+        this.originalCourse = structuredClone(res); // Deep copy for change detection
+      }
     })
 
     console.log('Course ID from URL:', this.courseId);
@@ -65,6 +68,9 @@ export class DetailsComponent implements OnInit{
 
   get previewRemainingChars(): number {
     return 255 - (this.course.previewDescription?.length || 0);
+  }
+  get isCourseUnchanged(): boolean {
+    return JSON.stringify(this.course) === JSON.stringify(this.originalCourse);
   }
 
   getProgressBarClass(): string {

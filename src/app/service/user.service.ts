@@ -83,4 +83,13 @@ export class UserService {
 
     return this.http.put<UserPostResponseDto>(`/api/post/username`, body);
   }
+
+  sendResetLink(username: string): Observable<any> {
+    return this.http.post(`/api/user/forgot-password?username=${username}`, {});
+  }
+
+  resetPassword(token: string, password: string) {
+    return this.http.post(`/api/user/reset-password?token=${token}`, { password });
+  }
+
 }

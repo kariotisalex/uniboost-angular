@@ -61,7 +61,10 @@
     <div class="flex flex-col space-y-3 w-full sm:w-40">
       <!-- Edit/Save -->
       <button
-        [ngClass]="editMode ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'"
+        [disabled]="editMode && isCourseUnchanged"
+        [ngClass]="editMode
+          ? 'bg-green-600 hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed'
+          : 'bg-blue-600 hover:bg-blue-700'"
         class="text-white w-full px-5 py-2.5 text-lg font-bold rounded-full transition"
         (click)="onEdit()">
         {{ editMode ? 'Save' : 'Edit' }}
@@ -116,7 +119,7 @@
     </ng-template>
   </div>
 
-  <!-- Enrolled Students (no label) -->
+  <!-- Enrolled Students List -->
   <app-enrolled-user
     [students]="course.enrolledStudents"
     (remove)="onRemoveStudent($event)">
