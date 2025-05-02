@@ -1,15 +1,21 @@
-<!-- home.component.html -->
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen bg-gradient-to-br from-[#fefce8] via-[#f8fafc] to-[#e2e8f0]">
   <!-- Top Navigation Bar -->
-  <header class="bg-blue-50 shadow">
+  <header class="bg-white/60 backdrop-blur-sm border-b border-gray-200 shadow">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
-      <!-- Title / Brand -->
-      <h1 class="text-xl font-semibold text-blue-900">Uniboost</h1>
+
+      <!-- Clickable Brand Name -->
+      <span
+        (click)="navigateToFeed()"
+        class="text-xl font-semibold text-gray-800 hover:text-indigo-700 transition cursor-pointer"
+      >
+        Uniboost
+      </span>
+
       <!-- Logout Button -->
       <div>
         <button
           type="button"
-          class="px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-500"
+          class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-md shadow"
           (click)="logout()"
         >
           Logout
@@ -21,18 +27,19 @@
   <!-- Main Content Area -->
   <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-      <!-- Sidebar: Navigation Buttons -->
-      <aside class="md:col-span-1 bg-white p-4 rounded-lg shadow h-48 overflow-y-auto">
+
+      <!-- Sidebar Navigation -->
+      <aside class="md:col-span-1 bg-white/70 backdrop-blur-md border border-gray-200 p-4 rounded-lg shadow h-48 overflow-y-auto">
         <nav class="space-y-4">
-          <!-- Navigation Buttons -->
+
+          <!-- Home -->
           <button
             type="button"
             [routerLink]="'/home/feed'"
             (click)="setActive('/home/feed')"
-            [ngClass]="this.navBarService.activeButton === '/home/feed' ? 'bg-blue-200' : 'hover:bg-blue-100'"
-            class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-blue-700 flex items-center"
+            [ngClass]="navBarService.activeButton === '/home/feed' ? 'bg-indigo-100' : 'hover:bg-indigo-50'"
+            class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-indigo-800 flex items-center"
           >
-            <!-- Home Icon -->
             <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V12H9v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9z" />
@@ -40,14 +47,14 @@
             Home
           </button>
 
+          <!-- Profile -->
           <button
             type="button"
             [routerLink]="'/home/myprofile'"
             (click)="setActive('/home/myprofile')"
-            [ngClass]="this.navBarService.activeButton === '/home/myprofile' ? 'bg-blue-200' : 'hover:bg-blue-100'"
-            class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-blue-700 flex items-center"
+            [ngClass]="navBarService.activeButton === '/home/myprofile' ? 'bg-indigo-100' : 'hover:bg-indigo-50'"
+            class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-indigo-800 flex items-center"
           >
-            <!-- Profile Icon -->
             <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M5.121 17.804A9 9 0 1 1 18.879 6.196M15 11a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
@@ -55,14 +62,14 @@
             My Profile
           </button>
 
+          <!-- Add Post -->
           <button
             type="button"
             [routerLink]="'/home/addpost'"
             (click)="setActive('/home/addpost')"
-            [ngClass]="this.navBarService.activeButton === '/home/addpost' ? 'bg-blue-200' : 'hover:bg-blue-100'"
-            class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-blue-700 flex items-center"
+            [ngClass]="navBarService.activeButton === '/home/addpost' ? 'bg-indigo-100' : 'hover:bg-indigo-50'"
+            class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-indigo-800 flex items-center"
           >
-            <!-- Add Post Icon -->
             <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
@@ -71,8 +78,8 @@
         </nav>
       </aside>
 
-      <!-- Dynamic Section (Feed, Profile, Add Post, etc.) -->
-      <section class="md:col-span-3 bg-white p-4 rounded-lg shadow">
+      <!-- Router Outlet -->
+      <section class="md:col-span-3 bg-white/70 backdrop-blur-md border border-gray-200 p-6 rounded-lg shadow">
         <router-outlet></router-outlet>
       </section>
     </div>

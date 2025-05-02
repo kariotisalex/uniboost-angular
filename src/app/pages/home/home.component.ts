@@ -31,4 +31,9 @@ export class HomeComponent {
     this.userService.logout();
   }
 
+  navigateToFeed(): void {
+    this.router.navigate(['/home/feed']);
+    this.navBarService.activeButton = '/home/feed';
+  }
+
 }
