@@ -11,6 +11,7 @@ export interface PostResponseOwnerDto {
 }
 
 export interface UserPostResponseDto {
+  id:string;
   username: string;
   firstname: string;
   lastname: string;

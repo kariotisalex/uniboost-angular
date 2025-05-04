@@ -3,7 +3,6 @@ import {PostResponseContainerDto} from './models/post-response';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {PostDetailsResponseDto} from './models/post-details-response-dto';
-import {UserPostResponseDto} from './models/user-post-response-dto';
 import {PostResponseOwnerDto} from './models/post-response-owner-dto';
 
 @Injectable({
@@ -44,7 +43,7 @@ export class PostService {
   }
 
   disenroll(id: string) {
-    return this.http.post<PostDetailsResponseDto>(`/api/post/disenroll/${id}`, {})
+    return this.http.delete<PostDetailsResponseDto>(`/api/post/disenroll/${id}`, {})
   }
 
   getEnrolledCourses(page: number, pageSize: number) {
@@ -60,4 +59,24 @@ export class PostService {
     return this.http.get<PostResponseOwnerDto>(`/api/post/mypost/${id}`);
   }
 
+  removeStudent(userId: string, postId: string): Observable<void> {
+    return this.http.delete<void>(`/api/post/disenroll/${userId}/${postId}`);
+  }
+
+  updatePost(course: PostResponseOwnerDto) {
+    const body = {
+      "id": course.id,
+      "previewDescription": course.previewDescription,
+      "description": course.description,
+      "isPersonal": course.isPersonal,
+      "place": course.place,
+      "maxEnrolls": course.maxEnrolls
+    }
+
+    return this.http.put<PostResponseOwnerDto>(`/api/post`, body)
+  }
+
+  delete(courseId: string) {
+    return this.http.delete(`/api/post/${courseId}`);
+  }
 }

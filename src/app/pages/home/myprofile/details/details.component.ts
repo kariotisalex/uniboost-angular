@@ -3,8 +3,10 @@ import {PostResponseOwnerDto, UserPostResponseDto} from '../../../../service/mod
 import {EnrolledUserComponent} from './enrolled-user/enrolled-user.component';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {PostService} from '../../../../service/post.service';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ErrorResponse} from '../../../../service/models/error-response';
 
 @Component({
   selector: 'app-details',
@@ -23,17 +25,20 @@ export class DetailsComponent implements OnInit{
   originalCourse!: PostResponseOwnerDto;
 
   constructor(private postService: PostService,
-              private route: ActivatedRoute) {}
+              private route: ActivatedRoute,
+              private router: Router) {}
 
-  ngOnInit(): void {
-    this.courseId = this.route.snapshot.paramMap.get('id') as string;
+  init() {
     this.postService.getMyPostDetails(this.courseId).subscribe({
       next: res => {
         this.course = res;
         this.originalCourse = structuredClone(res); // Deep copy for change detection
       }
     })
-
+  }
+  ngOnInit(): void {
+    this.courseId = this.route.snapshot.paramMap.get('id') as string;
+    this.init();
     console.log('Course ID from URL:', this.courseId);
   }
 
@@ -41,25 +46,50 @@ export class DetailsComponent implements OnInit{
 
   onEdit() {
     if (this.editMode) {
-      // Save logic here (API call or event emit)
-      console.log('Saved course:', this.course);
+      this.postService.updatePost(this.course).subscribe({
+        next: value => {
+          this.course = value;
+          this.originalCourse = structuredClone(this.course);
+        },
+        error: (err: HttpErrorResponse) => {
+          const errObj: ErrorResponse = err.error as ErrorResponse;
+          console.log(errObj.detail);
+        }
+      });
     }
     this.editMode = !this.editMode;
   }
 
+
   onCancel() {
     this.editMode = false;
-    console.log('Edit cancelled');
+    this.course = this.originalCourse;
   }
 
 
   onDelete() {
-    console.log('Delete course:', this.course.id);
+    const confirmDelete = window.confirm('Are you sure you want to delete this post?');
+
+    if (!confirmDelete) return;
+
+    this.postService.delete(this.courseId).subscribe({
+      next: () => {
+        this.router.navigateByUrl('/home/myprofile/info');
+      },
+      error: (err: HttpErrorResponse) => {
+        const errObj: ErrorResponse = err.error as ErrorResponse;
+        console.log(errObj.detail);
+      }
+    });
   }
 
+
   onRemoveStudent(student: UserPostResponseDto) {
-    this.course.enrolledStudents = this.course.enrolledStudents.filter(s => s.username !== student.username);
-    this.course.enrollments--;
+    this.postService.removeStudent(student.id,this.courseId).subscribe({
+      next: res => {
+        this.init();
+      }
+    })
   }
 
 

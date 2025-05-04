@@ -1,8 +1,7 @@
-<div class="max-w-3xl mx-auto mt-10 p-8 rounded-3xl border border-gray-200 bg-white space-y-8">
-
+<div class="max-w-3xl mx-auto mt-10 border-gray-200  space-y-8">
   <!-- Title & Preview -->
   <div>
-    <h2 class="text-4xl font-extrabold text-gray-900 mb-2">{{ course.title }}</h2>
+    <h2 class="text-4xl font-extrabold text-gray-900 mb-2">{{ course?.title }}</h2>
 
     <ng-container *ngIf="!editMode; else editPreview">
       <p class="text-lg text-gray-600">{{ course.previewDescription }}</p>
@@ -20,13 +19,12 @@
       </div>
     </ng-template>
   </div>
-
+  <!-- Divider -->
+  <div class="border-t border-gray-200 pt-2"></div>
   <!-- Type | Location | Edit/Delete -->
   <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6 mt-6">
-
     <!-- Type & Location -->
     <div class="flex flex-col sm:flex-row gap-10 sm:items-start text-base text-gray-700 flex-1">
-
       <!-- Type -->
       <div>
         <label class="block text-base font-semibold text-gray-700 uppercase tracking-wide mb-1">Type</label>
@@ -101,6 +99,21 @@
       </div>
     </div>
   </div>
+
+  <!-- Max Enrolls Input (Only in Edit Mode) -->
+  <ng-container *ngIf="editMode">
+    <div class="mt-4">
+      <label class="block text-base font-semibold text-gray-700 uppercase tracking-wide mb-2">
+        Max Enrollments
+      </label>
+      <input
+        type="number"
+        min="1"
+        [(ngModel)]="course.maxEnrolls"
+        class="w-full text-base text-gray-700 border border-gray-300 rounded px-3 py-2"
+      />
+    </div>
+  </ng-container>
 
   <!-- Divider -->
   <div class="border-t border-gray-200 pt-6"></div>
