@@ -15,8 +15,8 @@ export class UserService {
 
 
   init() {
-    const access_token : string | null = sessionStorage.getItem('access_token');
-    const refresh_token: string | null = sessionStorage.getItem('refresh_token');
+    const access_token : string | null = localStorage.getItem('access_token');
+    const refresh_token: string | null = localStorage.getItem('refresh_token');
 
     if (access_token != null && refresh_token != null) {
       this.authResponse = {
@@ -37,8 +37,8 @@ export class UserService {
   }
 
   loggedin(authResponse: AuthenticationResponse): boolean {
-    sessionStorage.setItem('access_token', authResponse.access_token);
-    sessionStorage.setItem('refresh_token', authResponse.refresh_token);
+    localStorage.setItem('access_token', authResponse.access_token);
+    localStorage.setItem('refresh_token', authResponse.refresh_token);
     this.authResponse = authResponse;
     return true;
   }
@@ -56,14 +56,16 @@ export class UserService {
   logout() {
     this.http.get('/api/user/logout').subscribe({
       next: authResponse => {
-        sessionStorage.clear();
+        localStorage.clear();
         this.authResponse = { access_token: '', refresh_token: '' };
         this.router.navigate(['login']);
       }
     });
   }
 
-
+  deleteAccount(): Observable<void> {
+    return this.http.delete<void>('/api/user');
+  }
   getUserInfo(): Observable<UserPostResponseDto> {
     return this.http.get<UserPostResponseDto>(`/api/user/userinfo`);
   }

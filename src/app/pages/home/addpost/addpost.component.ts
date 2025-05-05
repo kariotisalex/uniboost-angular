@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { PostService } from '../../../service/post.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ErrorResponse} from '../../../service/models/error-response';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-addpost',
@@ -21,7 +22,7 @@ export class AddpostComponent {
   place: string = '';
   errorMessage: string = '';
 
-  constructor(private postService: PostService) {}
+  constructor(private postService: PostService, private router: Router) {}
 
   areTextFieldsValid(): boolean {
     return (
@@ -53,7 +54,8 @@ export class AddpostComponent {
 
     this.postService.addPost(body).subscribe({
       next: (response) => {
-        console.log('Post created successfully');
+        alert("Post created successfully");
+        this.router.navigateByUrl(`/home/myprofile/details/${response}`);
         // Optional: reset form fields
       },
       error: (err:HttpErrorResponse) => {

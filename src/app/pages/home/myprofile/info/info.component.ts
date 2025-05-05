@@ -7,6 +7,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {EnrolledCoursesComponent} from './enrolled-courses/enrolled-courses.component';
 import {MyCoursesComponent} from './my-courses/my-courses.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-info',
@@ -24,7 +25,9 @@ export class InfoComponent implements OnInit{
   isEditingUsername = false;
   isEditingEmail = false;
 
-  constructor(private userService: UserService, private navBarService: NavBarService) {
+  constructor(private userService: UserService,
+              private navBarService: NavBarService,
+              private router: Router) {
     this.navBarService.activeButton = '/home/myprofile';
   }
 
@@ -104,7 +107,22 @@ export class InfoComponent implements OnInit{
     })
   }
 
+  deleteAccount(): void {
+    const confirmed = window.confirm('Are you sure you want to permanently delete your account? This cannot be undone.');
 
+    if (!confirmed) return;
+
+    this.userService.deleteAccount().subscribe({
+      next: () => {
+        sessionStorage.clear();
+        this.router.navigateByUrl('/');
+      },
+      error: err => {
+        console.error('Failed to delete account:', err);
+        alert('Something went wrong while deleting your account.');
+      }
+    });
+  }
 
   // ---- Username Editing ----
   saveUsername(): void {

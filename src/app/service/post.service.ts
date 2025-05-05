@@ -18,8 +18,11 @@ export class PostService {
     return this.http.get<PostResponseContainerDto>("/api/post/feed");
   }
 
-  getPostsByPage(page: number): Observable<PostResponseContainerDto> {
-    return this.http.get<PostResponseContainerDto>("/api/post/feed?page=" + page);
+  // getPostsByPage(page: number): Observable<PostResponseContainerDto> {
+  //   return this.http.get<PostResponseContainerDto>(`/api/post/feed?page=${page}`);
+  // }
+  getPostsByPage(page: number, search:string): Observable<PostResponseContainerDto> {
+    return this.http.get<PostResponseContainerDto>(`/api/post/feed?page=${page}&search=${search}`);
   }
 
 
@@ -30,8 +33,8 @@ export class PostService {
     isPersonal: boolean;
     place: string;
     title: string
-  }): Observable<unknown> {
-    return this.http.post('/api/post', body);
+  }): Observable<string> {
+    return this.http.post<string>('/api/post', body);
   }
 
   getPostDetails(id: string): Observable<PostDetailsResponseDto> {

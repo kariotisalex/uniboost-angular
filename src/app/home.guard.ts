@@ -13,8 +13,8 @@ export const homeGuard: CanActivateFn = (route, state) => {
   }
 
   if (
-    sessionStorage.getItem('access_token') !== null &&
-    sessionStorage.getItem('refresh_token') !== null
+    localStorage.getItem('access_token') !== null &&
+    localStorage.getItem('refresh_token') !== null
   ) {
     return true;
   }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import {CommonModule} from '@angular/common';
@@ -13,7 +13,7 @@ import {Router} from '@angular/router';
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
-export class SignupComponent {
+export class SignupComponent implements OnInit{
 
   error: string = "";
 
@@ -21,6 +21,10 @@ export class SignupComponent {
     private userService: UserService,
     private router: Router
   ) {}
+
+  ngOnInit(): void {
+        localStorage.clear();
+    }
 
   signupHandling = new FormGroup({
     username: new FormControl('', [Validators.required, Validators.minLength(6)]),

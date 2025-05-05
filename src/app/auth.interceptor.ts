@@ -14,7 +14,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
-  const accessToken = sessionStorage.getItem('access_token');
+  const accessToken = localStorage.getItem('access_token');
   const cloned = accessToken
     ? req.clone({ headers: req.headers.set('Authorization', `Bearer ${accessToken}`) })
     : req;
@@ -25,10 +25,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         isRefreshing = true;
         retryRequest = req;
 
-        const refreshToken = sessionStorage.getItem('refresh_token');
+        const refreshToken = localStorage.getItem('refresh_token');
 
         if (!refreshToken) {
-          sessionStorage.clear();
+          localStorage.clear();
           location.reload();
           return throwError(() => error);
         }
@@ -43,8 +43,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         ).pipe(
           switchMap((res) => {
             // Store new tokens
-            sessionStorage.setItem('access_token', res.access_token);
-            sessionStorage.setItem('refresh_token', res.refresh_token);
+            localStorage.setItem('access_token', res.access_token);
+            localStorage.setItem('refresh_token', res.refresh_token);
 
             // Retry original request with new access token
             const retryReq = retryRequest!.clone({
@@ -59,7 +59,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           }),
           catchError(refreshErr => {
             // Refresh token invalid — force logout
-            sessionStorage.clear();
+            localStorage.clear();
             location.reload();
             return throwError(() => refreshErr);
           })

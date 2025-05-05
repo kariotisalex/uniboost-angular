@@ -16,6 +16,9 @@ export class EnrolledUserComponent {
   @Output() remove = new EventEmitter<UserPostResponseDto>();
 
   removeStudent(student: UserPostResponseDto) {
+    const confirmDelete = window.confirm('Are you sure you want to delete this user from your course?');
+
+    if (!confirmDelete) return;
     this.remove.emit(student);
   }
 }
