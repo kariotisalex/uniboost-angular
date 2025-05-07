@@ -1,0 +1,7 @@
+services:
+  frontend:
+    build:
+      context: .
+    container_name: uniboost-frontend
+    ports:
+      - "4200:4200"
